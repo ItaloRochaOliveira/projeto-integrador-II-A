@@ -1,49 +1,52 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import models.APIConection.Request;
 import models.APIConection.Response;
 import server.ServerCRUD;
 
 public class App {
-    //up dev branch
+    private static AtomicInteger idCounter = new AtomicInteger(1);
     private static List<Usuario> usuarios = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
         ServerCRUD serverCRUD = new ServerCRUD();
 
         serverCRUD.get("/usuarios", (Request req, Response res) -> {
+            System.out.print(req.body);
            try {
                 String[] partes = req.path.split("/");
-                if (partes.length == 3 && !partes[2].isEmpty()) { // /usuarios/{id}
+                if (partes.length == 3 ) { // /usuarios/{id}
+
+                    if(partes[2].isEmpty()) throw new Exception("id não informado");
+
                     int id = Integer.parseInt(partes[2]);
-                    res.send("HTTP/1.1 200 OK\r\n", buscarUsuario(id));
-                } else if (partes.length == 3 && partes[2].isEmpty()) { // /usuarios/{id}
-                    int id = Integer.parseInt(partes[2]);
-                    res.send("HTTP/1.1 200 OK\r\n", buscarUsuario(id));
-                } else {
-                    res.send("HTTP/1.1 400 Bad Request\r\n", "{\"erro\": \"ID não informado\"}");
-                }
+                    res.send(200, buscarUsuario(id));
+                } else { 
+                    res.send(200, listarUsuarios());
+                } 
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send("HTTP/1.1 400 Bad Request\r\n", "{\"erro\": \"Requisição inválida\"}");
+                    res.send(400, "{\"erro\": \"Requisição inválida\"}");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
             }
         });
 
-        serverCRUD.get("/usuarios/id", (Request req, Response res) -> {
+        serverCRUD.post("/usuarios", (Request req, Response res) -> {
+            System.out.print(req.body);
             try {
-                String[] partes = req.path.split("/");
-                System.out.println(partes);
-                if (partes.length == 3) { // /usuarios/{id}
-                    int id = Integer.parseInt(partes[2]);
-                    res.send("HTTP/1.1 200 OK\r\n", buscarUsuario(id));
+                String response = criarUsuario(req.body);
+
+                if(response != null){
+                    res.send(201, response);
                 } else {
-                    res.send("HTTP/1.1 400 Bad Request\r\n", "{\"erro\": \"ID não informado\"}");
+
                 }
+                
             } catch (java.io.IOException e) {
                 e.printStackTrace();
                 // Optionally, send an error response
@@ -71,6 +74,22 @@ public class App {
                 .findFirst()
                 .map(Usuario::toJson)
                 .orElse("{\"erro\": \"Usuário não encontrado\"}");
+    }
+
+    private static String criarUsuario(String body) {
+        String nome = extrairCampoJson(body, "nome");
+        Usuario u = new Usuario(idCounter.getAndIncrement(), nome);
+        usuarios.add(u);
+        return u.toJson();
+    }
+
+    private static String extrairCampoJson(String json, String campo) {
+        // Simples extração de campo do tipo: {"nome":"Joao"}
+        int i = json.indexOf(campo);
+        if (i == -1) return "";
+        int start = json.indexOf("\"", i + campo.length() + 2) + 1;
+        int end = json.indexOf("\"", start);
+        return json.substring(start, end);
     }
 
     static class Usuario {
