@@ -2,6 +2,7 @@ package controller;
 
 import java.util.List;
 
+import db.enitites.Phonebook;
 import models.APIConection.Handler;
 import models.APIConection.Request;
 import models.APIConection.Response;
@@ -23,7 +24,7 @@ public class PhonebookController {
             System.out.print(req.body);
             try {
                 String[] partes = req.path.split("/");
-                if (partes.length == 3 ) { // /usuarios/{id}
+                if (partes.length == 3 ) {
 
                     if(partes[2].isEmpty()) throw new Exception("id do usuário não informado");
 
@@ -35,7 +36,7 @@ public class PhonebookController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": \"Requisição inválida\"}");
+                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -57,7 +58,7 @@ public class PhonebookController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": \"Requisição inválida\"}");
+                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -80,7 +81,7 @@ public class PhonebookController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": \"Requisição inválida\"}");
+                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -99,7 +100,7 @@ public class PhonebookController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": \"Requisição inválida\"}");
+                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -117,8 +118,16 @@ public class PhonebookController {
             Object item = lista.get(i);
             if (item == null) {
                 sb.append("null");
-            } else if (item instanceof JsonSerializable) {
-                sb.append(((JsonSerializable) item).toJson());
+            } else if (item instanceof Phonebook) {
+                Phonebook pb = (Phonebook) item;
+                sb.append(String.format(
+                    "{\"id\":%d,\"name\":\"%s\",\"telefone\":\"%s\",\"email\":\"%s\",\"user_id\":%d}",
+                    pb.getId(),
+                    pb.getName().replace("\"", "\\\""),
+                    pb.getTelefone().replace("\"", "\\\""),
+                    pb.getEmail().replace("\"", "\\\""),
+                    pb.getUserId()
+                ));
             } else {
                 sb.append('\"').append(item.toString().replace("\"", "\\\"")).append('\"');
             }

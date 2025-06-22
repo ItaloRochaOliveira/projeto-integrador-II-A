@@ -19,13 +19,13 @@ public class PhonebookRepository {
 
     public List<Phonebook> get(String params) {
         List<Phonebook> phonebooks = new ArrayList<>();
-        if (!allowedFields.contains(params)) {
+        if (!allowedFields.contains(params) && !params.equals("*")) {
             throw new IllegalArgumentException("Campo inválido: " + params);
         }
-        String sql = "SELECT ? FROM phonebook";
+        String sql = params.equals("*") ? "SELECT * FROM phonebook" : "SELECT " + params + " FROM phonebook";
         try {
             PreparedStatement stmt = conn.getConnection().prepareStatement(sql);
-            stmt.setString(1, params);
+            // stmt.setString(1, params);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Phonebook phonebook = new Phonebook(
@@ -49,10 +49,10 @@ public class PhonebookRepository {
 
     public List<Phonebook> getById(String params, int idUser) {
         List<Phonebook> phonebooks = new ArrayList<>();
-        if (!allowedFields.contains(params)) {
+        if (!allowedFields.contains(params) && !params.equals("*")) {
             throw new IllegalArgumentException("Campo inválido: " + params);
         }
-        String sql = "SELECT * FROM phonebook WHERE id_user = ?";
+        String sql = params.equals("*") ? "SELECT * FROM phonebook WHERE id = ?" : "SELECT " + params + " FROM phonebook WHERE id = ?";
         try {
             PreparedStatement stmt = conn.getConnection().prepareStatement(sql);
             stmt.setInt(1, idUser);
@@ -79,10 +79,10 @@ public class PhonebookRepository {
 
     public List<Phonebook> getByIdUser(String params, int idUser) {
         List<Phonebook> phonebooks = new ArrayList<>();
-        if (!allowedFields.contains(params)) {
+        if (!allowedFields.contains(params) && !params.equals("*")) {
             throw new IllegalArgumentException("Campo inválido: " + params);
         }
-        String sql = "SELECT * FROM phonebook WHERE id_user = ?";
+        String sql = params.equals("*") ? "SELECT * FROM phonebook WHERE user_id = ?" : "SELECT " + params + " FROM phonebook WHERE user_id = ?";
         try {
             PreparedStatement stmt = conn.getConnection().prepareStatement(sql);
             stmt.setInt(1, idUser);

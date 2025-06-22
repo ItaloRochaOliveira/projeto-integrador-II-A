@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS user_db;
 
-USE userdb;
+USE user_db;
 
 CREATE TABLE phonebook (
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,

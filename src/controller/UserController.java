@@ -29,9 +29,10 @@ public class UserController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": \"Requisição inválida\"}");
+                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
+                    
                 }
             }
         };
@@ -48,7 +49,7 @@ public class UserController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": \"Requisição inválida\"}");
+                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -70,7 +71,7 @@ public class UserController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": \"Requisição inválida\"}");
+                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -89,7 +90,7 @@ public class UserController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": \"Requisição inválida\"}");
+                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }

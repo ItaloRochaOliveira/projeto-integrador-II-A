@@ -1,3 +1,7 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 import controller.PhonebookController;
 import controller.UserController;
 import db.Connection;
@@ -9,17 +13,32 @@ import service.repository.UserRepository;
 
 public class Server {
     public static void main(String[] args) throws Exception {
+        String url;
+        String userDb;
+        String password;
+        Properties props = new Properties();
+
+        try (FileInputStream input = new FileInputStream("src/properties/config.properties")) {
+            props.load(input);
+
+            url = props.getProperty("db.url");
+            userDb = props.getProperty("db.user");
+            password = props.getProperty("db.password");
+        } catch (IOException e) {
+            throw new Exception(e);
+        };
+
         PhonebookController phonebookController = new PhonebookController(
             new PhonebookService(
                 new PhonebookRepository(
-                    new Connection()
+                    new Connection(url, userDb, password)
                 )
             )
         );
         UserController userController = new UserController(
             new UserService(
                 new UserRepository(
-                    new Connection()
+                    new Connection(url, userDb, password)
                 )
             )
         );
@@ -28,11 +47,11 @@ public class Server {
 
         serverCRUD.get("/usuarios", userController.get());
 
-        serverCRUD.get("/contato", phonebookController.get());
+        serverCRUD.get("/contatos", phonebookController.get());
 
         serverCRUD.post("/usuarios", userController.post());
 
-        serverCRUD.post("/contato", phonebookController.post());
+        serverCRUD.post("/contatos", phonebookController.post());
 
         serverCRUD.start();
     }
