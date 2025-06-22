@@ -17,9 +17,7 @@ Baixar repositorio: git clone git@github.com:ItaloRochaOliveira/projeto-integrad
 
 Entrar no repositorio ao baixar: cd projeto-integrador-II-A.git
 
-Instalar o driver para conexão MySQL: https://dev.mysql.com/downloads/connector/j/
-
-Adicionar nas biblitotecas do java.
+Adicionar a biblitoteca do MySQL: Está no arquivo lib e pode ser adicionado nas bibliotecas do java.
 
 Editar o arquivo config.properties para a conexão desejada.
 ```
