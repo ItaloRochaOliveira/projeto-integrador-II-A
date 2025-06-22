@@ -12,6 +12,7 @@ import service.repository.PhonebookRepository;
 import service.repository.UserRepository;
 
 public class Server {
+    //to not up properties
     public static void main(String[] args) throws Exception {
         String url;
         String userDb;
