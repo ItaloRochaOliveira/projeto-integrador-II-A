@@ -10,6 +10,20 @@ Foi desenvolvido para a entrega do **Projeto Integrador II - A** do curso de **A
 
 ---
 
+## 📖 concepção
+
+```
+Baixar repositorio: git clone git@github.com:ItaloRochaOliveira/projeto-integrador-II-A.git
+
+Entrar no repositorio ao baixar: cd projeto-integrador-II-A.git
+
+Instalar o driver para conexão MySQL: https://dev.mysql.com/downloads/connector/j/
+
+Adicionar nas biblitotecas do java.
+
+Editar o arquivo config.properties para a conexão desejada.
+```
+
 ## 🧠 Conceitos Aplicados
 
 - Programação Orientada a Objetos (POO)
