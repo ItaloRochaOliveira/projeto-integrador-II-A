@@ -2,6 +2,7 @@ package models.APIConection;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import common.enums.HttpStatus;
 
@@ -13,8 +14,8 @@ public class Response {
         String reason = (statusEnum != null) ? statusEnum.name() : "Unknown Status";
 
         out.write("HTTP/1.1 " + status + " " + reason + "\r\n");
-        out.write("Content-Type: application/json\r\n");
-        out.write("Content-Length: " + body.length() + "\r\n");
+        out.write("Content-Type: application/json; charset=UTF-8\r\n");
+        out.write("Content-Length: " + body.getBytes(StandardCharsets.UTF_8).length + "\r\n");
         out.write("\r\n");
         out.write(body);
         out.flush();

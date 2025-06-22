@@ -53,6 +53,14 @@ public class Server {
 
         serverCRUD.post("/contatos", phonebookController.post());
 
+        serverCRUD.put("/usuarios", userController.put());
+
+        serverCRUD.put("/contatos", phonebookController.put());
+
+        serverCRUD.delete("/usuarios", userController.delete());
+
+        serverCRUD.delete("/contatos", phonebookController.delete());
+
         serverCRUD.start();
     }
 };

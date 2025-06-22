@@ -29,7 +29,7 @@ public class UserController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
+                    res.send(400, "{\"erro\": \"" + e.getMessage() + "\"}");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                     
@@ -49,7 +49,7 @@ public class UserController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
+                    res.send(400, "{\"erro\": \"" + e.getMessage() + "\" }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -61,8 +61,8 @@ public class UserController {
         return (Request req, Response res) -> {
             try {
                 String[] partes = req.path.split("/");
-                if (partes.length < 4) throw new Exception("Caminho inválido");
-                int userId = Integer.parseInt(partes[3]);
+                if (partes.length < 3) throw new Exception("Caminho inválido");
+                int userId = Integer.parseInt(partes[2]);
                 String body = req.body;
                 String name = extractJsonString(body, "name");
                 String email = extractJsonString(body, "email");
@@ -71,7 +71,7 @@ public class UserController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
+                    res.send(400, "{\"erro\": \"" + e.getMessage() + "\" }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -83,14 +83,14 @@ public class UserController {
         return (Request req, Response res) -> {
             try {
                 String[] partes = req.path.split("/");
-                if (partes.length < 4) throw new Exception("Caminho inválido");
-                int userId = Integer.parseInt(partes[3]);
+                if (partes.length < 3) throw new Exception("Caminho inválido");
+                int userId = Integer.parseInt(partes[2]);
                 userService.delete(userId);
                 res.send(200, "{\"message\": \"Usuário removido com sucesso\"}");
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
+                    res.send(400, "{\"erro\": \"" + e.getMessage() + "\" }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }

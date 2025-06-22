@@ -30,9 +30,9 @@ public class PhonebookService {
         return result;
     }
 
-    public void post(String name, String telefone, String email, int userId) throws BadRequestException {
-        if (name == null || name.isBlank() || telefone == null || telefone.isBlank() || email == null || email.isBlank()) {
-            throw new BadRequestException("Nome, telefone e email são obrigatórios");
+    public void post(String name, String telefone, String email, Integer userId) throws BadRequestException {
+        if (name == null || name.isBlank() || telefone == null || telefone.isBlank() || email == null || email.isBlank() || userId == null || userId < 0) {
+            throw new BadRequestException("name, telefone, email e userId são obrigatórios");
         }
         phonebookRepository.create(name, telefone, email, userId);
     }

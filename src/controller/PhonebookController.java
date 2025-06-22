@@ -36,7 +36,7 @@ public class PhonebookController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
+                    res.send(400, "{\"erro\": \"" + e.getMessage() + "\" }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -52,13 +52,13 @@ public class PhonebookController {
                 String name = extractJsonString(body, "name");
                 String telefone = extractJsonString(body, "telefone");
                 String email = extractJsonString(body, "email");
-                int userId = extractJsonInt(body, "userId");
+                Integer userId = extractJsonInt(body, "userId");
                 phonebookService.post(name, telefone, email, userId);
                 res.send(201, "{\"message\": \"Contato criado com sucesso\"}");
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
+                    res.send(400, "{\"erro\": \"" + e.getMessage() + "\" }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -70,8 +70,8 @@ public class PhonebookController {
         return (Request req, Response res) -> {
             try {
                 String[] partes = req.path.split("/");
-                if (partes.length < 4) throw new Exception("Caminho inválido");
-                int phonebookId = Integer.parseInt(partes[3]);
+                if (partes.length < 3) throw new Exception("Caminho inválido");
+                int phonebookId = Integer.parseInt(partes[2]);
                 String body = req.body;
                 String name = extractJsonString(body, "name");
                 String telefone = extractJsonString(body, "telefone");
@@ -81,7 +81,7 @@ public class PhonebookController {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
+                    res.send(400, "{\"erro\": \"" + e.getMessage() + "\" }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -93,14 +93,14 @@ public class PhonebookController {
         return (Request req, Response res) -> {
             try {
                 String[] partes = req.path.split("/");
-                if (partes.length < 4) throw new Exception("Caminho inválido");
-                int phonebookId = Integer.parseInt(partes[3]);
+                if (partes.length < 3) throw new Exception("Caminho inválido");
+                int phonebookId = Integer.parseInt(partes[2]);
                 phonebookService.delete(phonebookId);
                 res.send(200, "{\"message\": \"Contato removido com sucesso\"}");
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    res.send(400, "{\"erro\": " + e.getMessage() + " }");
+                    res.send(400, "{\"erro\": \"" + e.getMessage() + "\" }");
                 } catch (java.io.IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -143,9 +143,14 @@ public class PhonebookController {
         return parts[1].split("\"")[0];
     }
 
-    private int extractJsonInt(String json, String key) {
-        String[] parts = json.split("\"" + key + "\"\\s*:\\s*");
-        if (parts.length < 2) return 0;
-        return Integer.parseInt(parts[1].split("[,}]")[0].replaceAll("[^0-9]", ""));
+    public Integer extractJsonInt(String json, String key) throws Exception {
+        if (!json.contains("\"" + key + "\"")) return null;
+        String valor = extractJsonString(json, key);
+        if (valor == null || valor.isBlank()) return null;
+        try {
+            return Integer.parseInt(valor);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }
