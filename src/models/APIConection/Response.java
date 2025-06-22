@@ -9,8 +9,8 @@ public class Response {
     private BufferedWriter out;
     public Response(BufferedWriter out) { this.out = out; }
     public void send(int status, String body) throws IOException {
-        String reason = getReasonPhrase(status);
-        if (reason == null) reason = "Unknown Status";
+        HttpStatus statusEnum = getReasonPhrase(status);
+        String reason = (statusEnum != null) ? statusEnum.name() : "Unknown Status";
 
         out.write("HTTP/1.1 " + status + " " + reason + "\r\n");
         out.write("Content-Type: application/json\r\n");
